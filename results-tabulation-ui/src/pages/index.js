@@ -58,11 +58,23 @@ export function TabulationTallySheetPage(props) {
 
     const {tallySheetId, tallySheetCode} = tallySheet;
     const {rootElection, voteType} = election;
+    const headerSuffix = tallySheet.electoralDistrictName ? "Electoral District: " + tallySheet.electoralDistrictName +
+        (tallySheet.pollingDivisionName ? " Polling Division: " + tallySheet.pollingDivisionName : null) : null;
 
     return <div className="page">
         <ElectionBreadCrumb election={election} additionalLinks={additionalBreadCrumbLinks}/>
         <div className="tally-sheet-page-header">
             <h4 className="tally-sheet-page-header-election">{rootElection.electionName}</h4>
+
+            <h5 className="tally-sheet-page-header-area">{tallySheet.electoralDistrictName ? "Electoral District: " : null}</h5>
+            <strong className="tally-sheet-page-header-election">
+                {tallySheet.electoralDistrictName ? tallySheet.electoralDistrictName : null}
+            </strong>
+            <h5 className="tally-sheet-page-header-area">{tallySheet.pollingDivisionName ? " Polling Division: " : null}</h5>
+            <strong className="tally-sheet-page-header-election">
+                {tallySheet.pollingDivisionName ? tallySheet.pollingDivisionName : null}
+            </strong>
+
             <strong className="tally-sheet-page-header-tally-sheet-code">
                 {getTallySheetCodeStr({tallySheetCode, voteType})}
             </strong>
