@@ -91,7 +91,7 @@ def get_area_map(electionId=None):
 
 
 @authorize(required_roles=ALL_ROLES)
-def get_mapped_area(electionId=None, areaIds=None, requestedAreaType=None):
+def get_mapped_area(electionId=None, tallySheetIds=None, requestedAreaType=None):
     election = Election.get_by_id(electionId=electionId)
     if election is None:
         raise NotFoundException(
@@ -100,7 +100,7 @@ def get_mapped_area(electionId=None, areaIds=None, requestedAreaType=None):
         )
 
     extended_election = election.get_extended_election()
-    mapped_area = extended_election.get_mapped_area(areaIds, requestedAreaType)
+    mapped_area = extended_election.get_mapped_area(tallySheetIds, requestedAreaType)
 
     return MappedAreaSchema(many=True).dump(mapped_area).data
 

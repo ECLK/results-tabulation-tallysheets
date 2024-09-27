@@ -238,7 +238,7 @@ paths:
         schema:
           type: integer
           format: int64
-      - name: areaIds
+      - name: tallySheetIds
         in: query
         required: true
         schema:

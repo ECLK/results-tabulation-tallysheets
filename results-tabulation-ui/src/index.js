@@ -8,21 +8,24 @@ import {Router} from "react-router";
 import {history} from "./utils";
 import {MessagesProvider} from "./services/messages.provider";
 import {TallySheetProvider} from "./services/tally-sheet.provider";
+import {TallySheetAreaProvider} from "./services/tally-sheet.area.provider";
 import {DialogProvider} from "./services/dialog.provider";
 import {ElectionProvider} from "./services/election.provider";
 
 ReactDOM.render(
     <ElectionProvider>
         <TallySheetProvider>
-            <DialogProvider>
-                <MessagesProvider>
-                    <BrowserRouter>
-                        <Router history={history}>
-                            <App/>
-                        </Router>
-                    </BrowserRouter>
-                </MessagesProvider>
-            </DialogProvider>
+            <TallySheetAreaProvider>
+                <DialogProvider>
+                    <MessagesProvider>
+                        <BrowserRouter>
+                            <Router history={history}>
+                                <App/>
+                            </Router>
+                        </BrowserRouter>
+                    </MessagesProvider>
+                </DialogProvider>
+            </TallySheetAreaProvider>
         </TallySheetProvider>
     </ElectionProvider>
     , document.getElementById('root')

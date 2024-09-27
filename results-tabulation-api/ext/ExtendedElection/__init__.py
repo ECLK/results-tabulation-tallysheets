@@ -68,26 +68,28 @@ class ExtendedElection:
 
         return self.get_area_map(area=area)
 
-    def get_mapped_area(self, area_ids=None, requested_area_type=None):
-
-        from orm.entities import Area
+    def get_mapped_area(self, tally_sheet_ids=None, requested_area_type=None):
+        from orm.entities import Area, TallySheet
         from schemas import AreaMapSchema
         filtered_area_map = []
 
-        for area_id in str(area_ids).split(","):
-            input_area = Area.Model.query.filter(Area.Model.areaId == area_id).one_or_none()
-            area_map = self.get_area_map(area=input_area)
-            area_map_data = AreaMapSchema(many=True).dump(area_map).data
+        for tally_sheet_id in str(tally_sheet_ids).split(","):
+            input_tallysheet = TallySheet.Model.query.filter(TallySheet.Model.tallySheetId == tally_sheet_id).one_or_none()
+            if input_tallysheet is not None:
+                input_area = Area.Model.query.filter(Area.Model.areaId == input_tallysheet.areaId).one_or_none()
+                area_map = self.get_area_map(area=input_area)
+                area_map_data = AreaMapSchema(many=True).dump(area_map).data
 
-            for area_data in area_map_data:
-                filtered_area_map.append({
-                    "areaId": input_area.areaId,
-                    "areaName": input_area.areaName,
-                    "areaType": input_area.areaType.name,
-                    "mappedAreaId": area_data[requested_area_type+"Id"],
-                    "mappedAreaName": area_data[requested_area_type+"Name"],
-                    "mappedAreaType": requested_area_type
-                })
+                for area_data in area_map_data:
+                    filtered_area_map.append({
+                        "tallySheetId": tally_sheet_id,
+                        "areaId": input_area.areaId,
+                        "areaName": input_area.areaName,
+                        "areaType": input_area.areaType.name,
+                        "mappedAreaId": area_data[requested_area_type+"Id"],
+                        "mappedAreaName": area_data[requested_area_type+"Name"],
+                        "mappedAreaType": requested_area_type
+                    })
 
         return filtered_area_map
 

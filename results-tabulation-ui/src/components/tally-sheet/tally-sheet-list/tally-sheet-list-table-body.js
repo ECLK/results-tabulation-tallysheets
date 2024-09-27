@@ -4,11 +4,13 @@ import TableCell from "@material-ui/core/TableCell";
 import Processing from "../../processing";
 import TableBody from "@material-ui/core/TableBody";
 import TallySheetListRow from "./tally-sheet-list-row";
+import {ElectionContext} from "../../../services/election.provider";
 import {
     TALLY_SHEET_LIST_COLUMN_ACTIONS,
     TALLY_SHEET_LIST_COLUMN_STATUS
 } from "../constants/TALLY_SHEET_COLUMN";
 import {TallySheetContext} from "../../../services/tally-sheet.provider";
+import {TallySheetAreaContext} from "../../../services/tally-sheet.area.provider";
 
 
 export default function TallySheetListTableBody(
@@ -26,6 +28,7 @@ export default function TallySheetListTableBody(
     }
 ) {
     const tallySheetContext = useContext(TallySheetContext);
+    const tallySheetAreaContext = useContext(TallySheetAreaContext);
     const {electionId} = election;
     const [tallySheetIds, setTallySheetIds] = useState([]);
     const [processing, setProcessing] = useState(true);
@@ -36,6 +39,9 @@ export default function TallySheetListTableBody(
             setTallySheetIds(prevState => {
                 return [...prevState, ...tallySheetIds]
             });
+            // Fetch areaTypes for each tallysheet
+            tallySheetAreaContext.fetchTallySheetMappedArea(92, tallySheetIds, "electoralDistrict")
+
         }).then(() => {
             setProcessing(false);
         }).catch((error) => {
@@ -43,6 +49,7 @@ export default function TallySheetListTableBody(
             setError(true);
             setProcessing(false);
         });
+
     }, []);
 
     const getTallySheetListJsx = function () {
